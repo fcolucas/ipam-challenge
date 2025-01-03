@@ -1,12 +1,47 @@
 import { Stack } from "expo-router";
+import { Provider as ReduxProvider } from "react-redux";
+import * as SplashScreen from "expo-splash-screen";
 
-import "@/global.css";
 import { GluestackUIProvider } from "@/components/ui/gluestack-ui-provider";
+import store from "@/core/stores/store";
+import "@/global.css";
+import { useEffect, useState } from "react";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
+// Prevent the splash screen from auto-hiding before asset loading is complete.
+SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
+  const [loaded, setLoaded] = useState(false);
+
+  const prepare = async () => {
+    let list = await AsyncStorage.getItem("items");
+
+    if (list == null) {
+      list = require("@/core/metadata/initial-items.json");
+      await AsyncStorage.setItem("items", JSON.stringify(list));
+    }
+  };
+
+  useEffect(() => {
+    prepare().then(() => setLoaded(true));
+  }, []);
+
+  useEffect(() => {
+    if (loaded) {
+      SplashScreen.hideAsync();
+    }
+  }, [loaded]);
+
+  if (!loaded) {
+    return null;
+  }
+
   return (
     <GluestackUIProvider mode="light">
-      <Stack screenOptions={{ headerShown: false }} />
+      <ReduxProvider store={store}>
+        <Stack screenOptions={{ headerShown: false }} />
+      </ReduxProvider>
     </GluestackUIProvider>
   );
 }
