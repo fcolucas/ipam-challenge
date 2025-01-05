@@ -8,15 +8,17 @@ import "@/global.css";
 import { useEffect, useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-// Prevent the splash screen from auto-hiding before asset loading is complete.
+// Mantém a tela de carregamento visível enquanto o aplicativo carrega
 SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
   const [loaded, setLoaded] = useState(false);
 
+  // Carrega as configurações iniciais
   const prepare = async () => {
     let list = await AsyncStorage.getItem("items");
 
+    // Caso não tenha uma lista salva no AsyncStorage, carrega os items de um arquivo
     if (list == null) {
       list = require("@/core/metadata/initial-items.json");
       await AsyncStorage.setItem("items", JSON.stringify(list));

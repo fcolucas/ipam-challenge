@@ -1,14 +1,14 @@
 import { useAppDispatch } from "@/core/hooks/use-redux";
-import { itemService } from "../services/item.service";
 import { loadList } from "@/core/stores/reducers/item.reducer";
 import { useEffect, useState } from "react";
+import { itemService } from "../services/item.service";
 
 /**
  * Hook para gerenciar as ações relacionadas aos items
  */
 export const useItem = () => {
-  const [loadingList, setLoadingList] = useState(false);
   const dispatch = useAppDispatch();
+  const [loadingList, setLoadingList] = useState(false);
 
   useEffect(() => {
     setLoadingList(true);
