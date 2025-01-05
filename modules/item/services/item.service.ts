@@ -1,27 +1,20 @@
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import uuid from "react-native-uuid";
+import { ItemRepository } from "../repositories/item.repository";
 
-const getAsyncItemList = async (): Promise<Item[]> => {
-  const list = await AsyncStorage.getItem("items");
-  return JSON.parse(list || "[]");
-};
+const itemRepository = new ItemRepository();
 
 export const itemService = {
   getItems: async (): Promise<Item[]> => {
-    const items = await getAsyncItemList();
+    const items = await itemRepository.getList();
     return items;
   },
 
   saveItem: async (description: string) => {
-    const items = await getAsyncItemList();
     const item = { id: uuid.v4(), description };
-    items.push(item);
-    await AsyncStorage.setItem("items", JSON.stringify(items));
+    await itemRepository.save(item);
   },
 
   removeItem: async (id: string) => {
-    const items = await getAsyncItemList();
-    const filteredItems = items.filter((item) => item.id !== id);
-    await AsyncStorage.setItem("items", JSON.stringify(filteredItems));
+    await itemRepository.remove(id);
   },
 };
