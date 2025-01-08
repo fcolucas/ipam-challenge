@@ -27,6 +27,6 @@ Desafio de uma lista de itens implementado com [Expo](https://expo.dev/) e [Reac
 
 - [app](./app) - Pasta contendo as telas da aplicação
 - [components](./components) - Componentes utilizados no projeto
-- [core](./core) - COnfigurações gerais do projeto
+- [core](./core) - Configurações gerais do projeto
 - [modules](./modules) - Serviços e repositórios utilizados no projeto
   
